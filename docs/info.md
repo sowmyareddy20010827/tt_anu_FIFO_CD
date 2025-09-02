@@ -10,15 +10,20 @@ You can also include images in this folder and reference them in the markdown. E
 ## How it works
 
 The asynchronous FIFO operates as a buffer that allows reliable data transfer between two independent clock domains. It uses a dual-port memory where the write side is driven by the write_clock and the read side is driven by the read_clock. Separate read and write pointers track positions in the memory, and these pointers are synchronized across domains using Gray-code conversion to avoid metastability issues. Control logic generates full and empty status flags based on the relative positions of the read and write pointers, ensuring that writes occur only when space is available and reads occur only when valid data exists. This structure allows smooth, lossless data movement even when the two clocks are unrelated, making the design robust and reusable for asynchronous communication.
+ 
 
+## How to Test
 
-## How to test
+To reset the FIFO, keep write_reset and read_reset low while toggling the clock for a short period, then set them high to initialize the module.
 
-Hold ``write_reset`` and ``read_reset`` LOW while running the clock for a bit to reset, then raise to initialize the module.
+### Writing to the FIFO
 
-Writing to the fifo: Prepare your data on the 4-bit ``write_data`` bus, ensure the full state is low and then raise write_increment for 1 cycle of ``write_clock`` to write data into the FIFO memory.
+Place the desired 4-bit value on the write_data bus, check that the full flag is low, and then pulse write_increment high for one cycle of the write_clock to store the value.
 
-Reading from the fifo: The FIFO will present the current output on the ``read_data`` bus. If empty is low, this output should be valid and you can acknowledge receive of this value by raising ``read_increment`` for 1 cycle of read_clock.
+### Reading from the FIFO
+
+The current output is continuously available on the read_data bus. If the empty flag is low, the data is valid, and you can advance to the next value by pulsing read_increment high for one cycle of the read_clock.
+
 
 ## External hardware
 
