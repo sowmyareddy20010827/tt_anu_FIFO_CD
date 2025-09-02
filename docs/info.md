@@ -9,12 +9,19 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+This FIFO is designed to transfer data asynchronously between different clock domains. It supports storage of up to 32 entries, each 4 bits wide, for a total capacity of 16 bytes. The design uses separate read and write pointers with full and empty control signals, ensuring data is written only when space is available and read only when valid data is present. By synchronizing pointers across clock domains, it enables reliable and lossless data transfer.
 
-## How to test
+ 
 
-Explain how to use your project
+## How to Test
 
-## External hardware
+To reset the FIFO, keep write_reset and read_reset low while toggling the clock for a short period, then set them high to initialize the module.
 
-List external hardware used in your project (e.g. PMOD, LED display, etc), if any
+### Writing to the FIFO
+
+Place the desired 4-bit value on the write_data bus, check that the full flag is low, and then pulse write_increment high for one cycle of the write_clock to store the value.
+
+### Reading from the FIFO
+
+The current output is continuously available on the read_data bus. If the empty flag is low, the data is valid, and you can advance to the next value by pulsing read_increment high for one cycle of the read_clock.
+
