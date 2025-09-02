@@ -1,5 +1,6 @@
 
 `default_nettype none
+`include "cdc_fifo.v"
 
 module tt_um_anu_fifo_cd (
     input  wire [7:0] ui_in,    // Dedicated inputs
