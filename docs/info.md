@@ -9,7 +9,7 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-The ``cdc_fifo`` module transfers data between two clock domains: a write clock domain and a read clock domain. The module includes a dual-ported RAM(dpram) for storing data, along with logic for handling read and write operations(cdc_fifo_read_state and cdc_fifo-write-state). synchronizers(synchronizer) and binary/gray converters(binary_to_gray and gray_to_binary) ensure proper synchronization between two clock domains.
+The asynchronous FIFO operates as a buffer that allows reliable data transfer between two independent clock domains. It uses a dual-port memory where the write side is driven by the write_clock and the read side is driven by the read_clock. Separate read and write pointers track positions in the memory, and these pointers are synchronized across domains using Gray-code conversion to avoid metastability issues. Control logic generates full and empty status flags based on the relative positions of the read and write pointers, ensuring that writes occur only when space is available and reads occur only when valid data exists. This structure allows smooth, lossless data movement even when the two clocks are unrelated, making the design robust and reusable for asynchronous communication.
 
 
 ## How to test
